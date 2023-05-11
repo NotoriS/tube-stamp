@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/light-mode.png" id="faviconTag">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exact YouTube Upload Date Finder</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+    <script type="text/javascript">
+      const faviconTag = document.getElementById("faviconTag");
+      const isDark = window.matchMedia("(prefers-color-scheme: dark)");
+
+      const changeFavicon = () => {
+        if (isDark.matches) faviconTag.href = "dark-mode.png";
+        else faviconTag.href = "light-mode.png";
+      }
+      changeFavicon();
+      isDark.addEventListener("change", changeFavicon);
+    </script>
+  </body>
+</html>
