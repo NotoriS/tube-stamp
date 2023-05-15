@@ -1,6 +1,7 @@
 <script>
-import Header from './Header.vue'
-import Footer from './Footer.vue'
+import axios from "axios"
+import Header from "./Header.vue"
+import Footer from "./Footer.vue"
 
 export default {
   components: {
@@ -13,8 +14,10 @@ export default {
     }
   },
   methods: {
-    getVideoData() {
-      // Get video data
+    async getVideoData() {
+      var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + this.URL + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
+      var videoData = apiData.data.items[0].snippet
+      console.log(videoData)
       this.URL = ''
     }
   }
