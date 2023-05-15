@@ -16,14 +16,15 @@ export default {
   methods: {
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
+      this.URL = ''
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
         var videoData = apiData.data.items[0].snippet
         console.log(videoData)
       }
-      this.URL = ''
     },
-    youtubeParser(url) { // Function take from: https://stackoverflow.com/a/8260383
+    // Function take from: https://stackoverflow.com/a/8260383
+    youtubeParser(url) { 
       var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
       var match = url.match(regExp)
       return (match&&match[7].length==11)? match[7] : false
