@@ -31,7 +31,6 @@ export default {
           <input v-model="URL" type="text" class="form-control" style="margin-right: 10px" placeholder="Enter a YouTube URL">
           <button type="submit" class="btn btn-dark">Enter</button>
         </form>
-        <p>{{URL}}</p>
       </div>
     </div>
   </main>
