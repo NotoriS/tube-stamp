@@ -10,7 +10,8 @@ export default {
   },
   data() {
     return {
-      URL: ''
+      URL: '',
+      inputValidity: ''
     }
   },
   methods: {
@@ -19,11 +20,18 @@ export default {
       this.URL = ''
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
-        var videoData = apiData.data.items[0].snippet
-        console.log(videoData)
+        if (apiData.data.items.length == 1) {
+          this.inputValidity = ''
+          var videoData = apiData.data.items[0].snippet
+          console.log(videoData)
+        } else {
+          this.inputValidity = 'is-invalid'
+        }
+      } else {
+        this.inputValidity = 'is-invalid'
       }
     },
-    // Function take from: https://stackoverflow.com/a/8260383
+    // Function from: https://stackoverflow.com/a/8260383
     youtubeParser(url) { 
       var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
       var match = url.match(regExp)
@@ -40,7 +48,7 @@ export default {
       <div class=" container bg-light mt-5 p-5 border">
         <h2 class="text-muted text-center mb-4">Find a YouTube Upload Date</h2>
         <form class="d-flex flex-row mx-auto" @submit.prevent="getVideoData">
-          <input v-model="URL" type="text" class="form-control" style="margin-right: 10px" placeholder="Enter a YouTube URL">
+          <input v-model="URL" type="text" class="form-control" :class="inputValidity" style="margin-right: 10px" placeholder="Enter a YouTube URL">
           <button type="submit" class="btn btn-dark">Enter</button>
         </form>
       </div>
