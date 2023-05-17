@@ -23,7 +23,7 @@ export default {
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
         if (apiData.data.items.length == 1) {
-          this.inputValidity = ''
+          this.inputValidity = 'is-valid'
           var videoData = apiData.data.items[0].snippet
           console.log(videoData)
           this.videoThumbnail = videoData.thumbnails.maxres.url
@@ -60,7 +60,7 @@ export default {
         <div v-if="inputValidity == 'is-invalid'" class="warning-block p-3 mt-5">
           <p class="text-center m-auto">The URL you have entered is invalid.</p>
         </div>
-        <div v-else class="row mt-5">
+        <div v-if="inputValidity == 'is-valid'" class="row mt-5">
           <div class="col-lg mb-5">
             <img class="img-fluid mb-2" :src="videoThumbnail">
             <div class="text-center">
