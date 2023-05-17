@@ -48,14 +48,26 @@ export default {
       <div class=" container bg-light mt-5 p-5 border">
         <h2 class="text-muted text-center mb-4">Find a YouTube Upload Date</h2>
         <form class="d-flex flex-row mx-auto" @submit.prevent="getVideoData">
-          <input v-model="URL" type="text" class="form-control" :class="inputValidity" style="margin-right: 10px" placeholder="Enter a YouTube URL">
+          <input v-model="URL" type="text" class="form-control input-margin" :class="inputValidity" placeholder="Enter a YouTube URL">
           <button type="submit" class="btn btn-dark">Enter</button>
         </form>
-        <div v-if="inputValidity == 'is-invalid'" class="p-3 mt-5" style="background-color: #F2DEDE;">
-          <p class="text-center m-auto" style="color: #A94442;">The URL you have entered is invalid.</p>
+        <div v-if="inputValidity == 'is-invalid'" class="warning-block p-3 mt-5">
+          <p class="text-center m-auto">The URL you have entered is invalid.</p>
         </div>
       </div>
     </div>
   </main>
   <Footer />
 </template>
+
+<style type="text/css">
+.warning-block {
+  background-color: #F2DEDE;
+}
+.warning-block > p {
+  color: #A94442;
+}
+.input-margin {
+  margin-right: 10px;
+}
+</style>
