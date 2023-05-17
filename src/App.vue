@@ -31,11 +31,11 @@ export default {
         this.inputValidity = 'is-invalid'
       }
     },
-    // Function from: https://stackoverflow.com/a/8260383
+    // Function modified from: https://stackoverflow.com/a/8260383
     youtubeParser(url) { 
-      var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/
+      var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(shorts\/)|(watch\?))\??v?=?([^#&?]*).*/
       var match = url.match(regExp)
-      return (match&&match[7].length==11)? match[7] : false
+      return (match&&match[8].length==11)? match[8] : false
     }
   }
 }
