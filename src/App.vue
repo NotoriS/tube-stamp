@@ -51,6 +51,9 @@ export default {
           <input v-model="URL" type="text" class="form-control" :class="inputValidity" style="margin-right: 10px" placeholder="Enter a YouTube URL">
           <button type="submit" class="btn btn-dark">Enter</button>
         </form>
+        <div v-if="inputValidity == 'is-invalid'" class="p-3 mt-5" style="background-color: #F2DEDE;">
+          <p class="text-center m-auto" style="color: #A94442;">The URL you have entered is invalid.</p>
+        </div>
       </div>
     </div>
   </main>
