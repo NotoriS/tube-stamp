@@ -17,7 +17,6 @@ export default {
   methods: {
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
-      this.URL = ''
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
         if (apiData.data.items.length == 1) {
@@ -26,9 +25,11 @@ export default {
           console.log(videoData)
         } else {
           this.inputValidity = 'is-invalid'
+          this.URL = ''
         }
       } else {
         this.inputValidity = 'is-invalid'
+        this.URL = ''
       }
     },
     // Function modified from: https://stackoverflow.com/a/8260383
