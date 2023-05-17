@@ -27,6 +27,7 @@ export default {
           var videoData = apiData.data.items[0].snippet
           console.log(videoData)
           this.videoThumbnail = videoData.thumbnails.maxres.url
+          this.videoTitle = videoData.title
         } else {
           this.inputValidity = 'is-invalid'
           this.URL = ''
@@ -61,7 +62,12 @@ export default {
         </div>
         <div v-else class="row mt-5">
           <div class="col-lg">
-            <img class="img-fluid" :src="videoThumbnail">
+            <img class="img-fluid mb-2" :src="videoThumbnail">
+            <div class="text-center">
+              <b>
+                {{ videoTitle }}
+              </b>
+            </div>
           </div>
           <div class="col-lg">
             
