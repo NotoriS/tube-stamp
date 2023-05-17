@@ -11,7 +11,10 @@ export default {
   data() {
     return {
       URL: '',
-      inputValidity: ''
+      inputValidity: '',
+      videoThumbnail: '',
+      videoTitle: '',
+      videoPublishDate: ''
     }
   },
   methods: {
@@ -23,6 +26,7 @@ export default {
           this.inputValidity = ''
           var videoData = apiData.data.items[0].snippet
           console.log(videoData)
+          this.videoThumbnail = videoData.thumbnails.maxres.url
         } else {
           this.inputValidity = 'is-invalid'
           this.URL = ''
@@ -46,7 +50,7 @@ export default {
   <Header />
   <main>
     <div class="container">
-      <div class=" container bg-light mt-5 p-5 border">
+      <div class=" container bg-light my-5 p-5 border">
         <h2 class="text-muted text-center mb-4">Find a YouTube Upload Date</h2>
         <form class="d-flex flex-row mx-auto" @submit.prevent="getVideoData">
           <input v-model="URL" type="text" class="form-control input-margin shadow-none" :class="inputValidity" placeholder="Paste a YouTube URL">
@@ -54,6 +58,14 @@ export default {
         </form>
         <div v-if="inputValidity == 'is-invalid'" class="warning-block p-3 mt-5">
           <p class="text-center m-auto">The URL you have entered is invalid.</p>
+        </div>
+        <div v-else class="row mt-5">
+          <div class="col-lg">
+            <img class="img-fluid" :src="videoThumbnail">
+          </div>
+          <div class="col-lg">
+            
+          </div>
         </div>
       </div>
     </div>
