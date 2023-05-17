@@ -69,7 +69,7 @@ export default {
               </b>
             </div>
           </div>
-          <div class="col-lg text-center">
+          <div class="col-lg text-center my-auto">
             <h3><b>Date and Time Published</b></h3>
             <div class="my-5">January 15th 12:00pm</div> <!-- Placeholder -->
             <h3><b>Time Elapsed Since Publishing</b></h3>
