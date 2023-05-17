@@ -52,7 +52,7 @@ export default {
   <main>
     <div class="container">
       <div class=" container bg-light my-5 p-5 border">
-        <h2 class="text-muted text-center mb-4">Find a YouTube Upload Date</h2>
+        <h2 class="text-muted text-center mb-4">Find a YouTube Publish Date</h2>
         <form class="d-flex flex-row mx-auto" @submit.prevent="getVideoData">
           <input v-model="URL" type="text" class="form-control input-margin shadow-none" :class="inputValidity" placeholder="Paste a YouTube URL">
           <button type="submit" class="btn btn-dark shadow-none">Enter</button>
@@ -61,7 +61,7 @@ export default {
           <p class="text-center m-auto">The URL you have entered is invalid.</p>
         </div>
         <div v-else class="row mt-5">
-          <div class="col-lg">
+          <div class="col-lg mb-5">
             <img class="img-fluid mb-2" :src="videoThumbnail">
             <div class="text-center">
               <b>
@@ -69,8 +69,11 @@ export default {
               </b>
             </div>
           </div>
-          <div class="col-lg">
-            
+          <div class="col-lg text-center">
+            <h3><b>Date and Time Published</b></h3>
+            <div class="my-5">January 15th 12:00pm</div> <!-- Placeholder -->
+            <h3><b>Time Elapsed Since Publishing</b></h3>
+            <div class="my-5">10 Days 14 Hours 15 Minutes 12 Seconds</div> <!-- Placeholder -->
           </div>
         </div>
       </div>
