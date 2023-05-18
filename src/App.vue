@@ -28,6 +28,8 @@ export default {
           console.log(videoData)
           this.videoThumbnail = videoData.thumbnails.maxres.url
           this.videoTitle = videoData.title
+          this.videoPublishDate = videoData.publishedAt
+          console.log(this.videoPublishDate)
         } else {
           this.inputValidity = 'is-invalid'
           this.URL = ''
