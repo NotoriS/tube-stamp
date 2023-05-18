@@ -48,8 +48,26 @@ export default {
 
       this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
-    setTimeElapsedSincePublish() {
+    setTimeElapsedSincePublish(publishDate) {
+      const now = new Date()
 
+      const isPastPublishedMonth = now.getMonth() > publishDate.getMonth()
+      const isPublishedMonth = now.getMonth() == publishDate.getMonth()
+      const isPastPublishedDay = now.getDate() > publishDate.getDate()
+      const isPublishedDay = now.getDate() == publishDate.getDate()
+      const isPastPublishedHour = now.getHours() > publishDate.getHours()
+      const isPublishedHour = now.getHours() == publishDate.getHours()
+      const isPastPublishedMinute = now.getMinutes() > publishDate.getMinutes()
+      const isPublishedMinute = now.getMinutes() == publishDate.getMinutes()
+      const isPastPublishedSecond = now.getSeconds() >= publishDate.getSeconds()
+
+      const removeYears = (isPastPublishedMonth ||
+        (isPublishedMonth && isPastPublishedDay) ||
+        (isPublishedMonth && isPublishedDay && isPastPublishedHour) ||
+        (isPublishedMonth && isPublishedDay && isPublishedHour && isPastPublishedMinute) ||
+        (isPublishedMonth && isPublishedDay && isPublishedHour && isPublishedMinute && isPastPublishedSecond))? 0 : 1
+      const years = now.getFullYear() - publishDate.getFullYear() - removeYears
+      console.log(years)
     },
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
@@ -66,6 +84,7 @@ export default {
           this.videoTitle = videoData.title
           this.videoPublishDate = new Date(videoData.publishedAt)
           this.setVideoPublishDateString(this.videoPublishDate)
+          this.setTimeElapsedSincePublish(this.videoPublishDate)
         } else {
           this.inputValidity = 'is-invalid'
           this.URL = ''
@@ -103,7 +122,7 @@ export default {
             <h3><b>Date and Time Published</b></h3>
             <div class="my-5">{{ videoPublishDateString }}</div>
             <h3><b>Time Elapsed Since Publishing</b></h3>
-            <div class="my-5">10 Days 14 Hours 15 Minutes 12 Seconds</div> <!-- Placeholder -->
+            <div class="my-5">Coming Soon</div> <!-- Placeholder -->
           </div>
         </div>
       </div>
