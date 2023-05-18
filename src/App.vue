@@ -18,6 +18,12 @@ export default {
     }
   },
   methods: {
+    // Function modified from: https://stackoverflow.com/a/8260383
+    youtubeParser(url) { 
+      var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(shorts\/)|(watch\?))\??v?=?([^#&?]*).*/
+      var match = url.match(regExp)
+      return (match&&match[8].length==11)? match[8] : false
+    },
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
       if (videoID) {
@@ -38,12 +44,6 @@ export default {
         this.inputValidity = 'is-invalid'
         this.URL = ''
       }
-    },
-    // Function modified from: https://stackoverflow.com/a/8260383
-    youtubeParser(url) { 
-      var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(shorts\/)|(watch\?))\??v?=?([^#&?]*).*/
-      var match = url.match(regExp)
-      return (match&&match[8].length==11)? match[8] : false
     }
   }
 }
