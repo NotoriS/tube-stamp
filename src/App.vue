@@ -15,7 +15,8 @@ export default {
       videoThumbnail: '',
       videoTitle: '',
       videoPublishDate: '',
-      videoPublishDateString: ''
+      videoPublishDateString: '',
+      timeElapsedSincePublish: ''
     }
   },
   methods: {
@@ -37,7 +38,7 @@ export default {
 
       var hours = publishDate.getHours()
       const ampm = (hours < 12)? "a.m." : "p.m."
-      hours = hours % 12
+      hours %= 12
       if (hours == 0) 
         hours = 12
 
@@ -47,6 +48,9 @@ export default {
 
       this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
+    setTimeElapsedSincePublish() {
+
+    },
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
       if (videoID) {
@@ -55,7 +59,10 @@ export default {
           this.inputValidity = 'is-valid'
           var videoData = apiData.data.items[0].snippet
           console.log(videoData)
-          this.videoThumbnail = videoData.thumbnails.maxres.url
+          if (videoData.thumbnails.maxres != null)
+            this.videoThumbnail = videoData.thumbnails.maxres.url
+          else
+            this.videoThumbnail = videoData.thumbnails.standard.url
           this.videoTitle = videoData.title
           this.videoPublishDate = new Date(videoData.publishedAt)
           this.setVideoPublishDateString(this.videoPublishDate)
