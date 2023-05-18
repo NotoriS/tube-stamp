@@ -14,7 +14,8 @@ export default {
       inputValidity: '',
       videoThumbnail: '',
       videoTitle: '',
-      videoPublishDate: ''
+      videoPublishDate: '',
+      videoPublishDateString: ''
     }
   },
   methods: {
@@ -23,6 +24,28 @@ export default {
       var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(shorts\/)|(watch\?))\??v?=?([^#&?]*).*/
       var match = url.match(regExp)
       return (match&&match[8].length==11)? match[8] : false
+    },
+    setVideoPublishDateString(publishDate) {
+      const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday","Thursday", "Friday", "Saturday"]
+      const day = dayNames[publishDate.getDay()]
+
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+      const month = monthNames[publishDate.getMonth()]
+
+      const dayOfMonth = publishDate.getDate()
+      const year = publishDate.getFullYear()
+
+      var hours = publishDate.getHours()
+      const ampm = (hours < 12)? "a.m." : "p.m."
+      hours = hours % 12
+      if (hours == 0) 
+        hours = 12
+
+      var minutes = publishDate.getMinutes()
+      if (minutes < 10)
+        minutes = "0" + minutes
+
+      this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
@@ -34,8 +57,8 @@ export default {
           console.log(videoData)
           this.videoThumbnail = videoData.thumbnails.maxres.url
           this.videoTitle = videoData.title
-          this.videoPublishDate = videoData.publishedAt
-          console.log(this.videoPublishDate)
+          this.videoPublishDate = new Date(videoData.publishedAt)
+          this.setVideoPublishDateString(this.videoPublishDate)
         } else {
           this.inputValidity = 'is-invalid'
           this.URL = ''
@@ -66,14 +89,12 @@ export default {
           <div class="col-lg mb-5">
             <img class="img-fluid mb-2" :src="videoThumbnail">
             <div class="text-center">
-              <b>
-                {{ videoTitle }}
-              </b>
+              <b>{{ videoTitle }}</b>
             </div>
           </div>
           <div class="col-lg text-center my-auto">
             <h3><b>Date and Time Published</b></h3>
-            <div class="my-5">January 15th 12:00pm</div> <!-- Placeholder -->
+            <div class="my-5">{{ videoPublishDateString }}</div>
             <h3><b>Time Elapsed Since Publishing</b></h3>
             <div class="my-5">10 Days 14 Hours 15 Minutes 12 Seconds</div> <!-- Placeholder -->
           </div>
