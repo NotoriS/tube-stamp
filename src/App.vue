@@ -28,6 +28,7 @@ export default {
       var match = url.match(regExp)
       return (match&&match[8].length==11)? match[8] : false
     },
+    // Creates a clearly readable date and time to be dispalyed on the page
     setVideoPublishDateString(publishDate) {
       const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday","Thursday", "Friday", "Saturday"]
       const day = dayNames[publishDate.getDay()]
@@ -50,6 +51,7 @@ export default {
 
       this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
+    // Creates the live updating time elapsed value
     setTimeElapsedSincePublish(publishDate) {
       const calcTimeElapsedSincePublish = () => {
         const second = 1000
@@ -62,6 +64,7 @@ export default {
         publishDate = publishDate.valueOf()
         var dateDiff = now - publishDate
 
+        // Calculates total time elapsed
         var weeks = Math.floor(dateDiff / week)
         dateDiff %= week
         var days = Math.floor(dateDiff / day)
@@ -72,47 +75,53 @@ export default {
         dateDiff %= minute
         var seconds = Math.floor(dateDiff / second)
 
+        // Reformats total time elapsed
         weeks = (weeks == 0)? "" : (weeks == 1)? weeks + " Week, " : weeks + " Weeks, "
         days = (days == 0)? "" : (days == 1)? days + " Day, " : days + " Days, "
         hours = (hours == 0)? "" : (hours == 1)? hours + " Hour, " : hours + " Hours, "
         minutes = (minutes == 0)? "" : (minutes == 1)? minutes + " Minute, " : minutes + " Minutes, "
         seconds = (seconds == 1)? seconds + " Second " : seconds + " Seconds "
 
-        this.timeElapsedSincePublish = weeks + days + hours + minutes + seconds
-        console.log(this.timeElapsedSincePublish)        
+        this.timeElapsedSincePublish = weeks + days + hours + minutes + seconds       
       }
       calcTimeElapsedSincePublish()
       interval = setInterval(calcTimeElapsedSincePublish, 1000)
     },
+    // Retrieves video data from the YouTube API
     async getVideoData() {
-      clearInterval(interval)
-      var videoID = this.youtubeParser(this.URL)
+      clearInterval(interval) // Clears the previous time elapsed
+      var videoID = this.youtubeParser(this.URL) // Retrieves video ID from URL
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
-        if (apiData.data.items.length == 1) {
+        if (apiData.data.items.length == 1) { // Results are valid
           this.inputValidity = 'is-valid'
           var videoData = apiData.data.items[0].snippet
           console.log(videoData)
+
+          // Grabs best available thumbnail picture
           if (videoData.thumbnails.maxres != null)
             this.videoThumbnail = videoData.thumbnails.maxres.url
           else
             this.videoThumbnail = videoData.thumbnails.standard.url
+
           this.videoTitle = videoData.title
           this.videoPublishDate = new Date(videoData.publishedAt)
           this.setVideoPublishDateString(this.videoPublishDate)
           this.setTimeElapsedSincePublish(this.videoPublishDate)
-        } else {
+        } else { // Results are invalid
           this.inputValidity = 'is-invalid'
           this.URL = ''
+          console.error("Results are invalid")
         }
-      } else {
+      } else { // URL is invalid
         this.inputValidity = 'is-invalid'
         this.URL = ''
+        console.error("URL is invalid")
       }
     }
   },
   unmounted() {
-    clearInterval(interval)
+    clearInterval(interval) // Ensures time elapsed is cleared
   }
 }
 </script>
@@ -141,7 +150,7 @@ export default {
             <h3><b>Date and Time Published</b></h3>
             <div class="my-5">{{ videoPublishDateString }}</div>
             <h3><b>Time Elapsed Since Publishing</b></h3>
-            <div class="my-5">{{ timeElapsedSincePublish }}</div> <!-- Placeholder -->
+            <div class="my-5">{{ timeElapsedSincePublish }}</div>
           </div>
         </div>
       </div>
