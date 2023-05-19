@@ -3,6 +3,8 @@ import axios from "axios"
 import Header from "./Header.vue"
 import Footer from "./Footer.vue"
 
+var interval
+
 export default {
   components: {
     Header,
@@ -49,36 +51,41 @@ export default {
       this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
     setTimeElapsedSincePublish(publishDate) {
-      const second = 1000
-      const minute = second * 60
-      const hour = minute * 60
-      const day = hour * 24
-      const week = day * 7
+      const calcTimeElapsedSincePublish = () => {
+        const second = 1000
+        const minute = second * 60
+        const hour = minute * 60
+        const day = hour * 24
+        const week = day * 7
 
-      const now = Date.now()
-      publishDate = publishDate.valueOf()
-      var dateDiff = now - publishDate
+        const now = Date.now()
+        publishDate = publishDate.valueOf()
+        var dateDiff = now - publishDate
 
-      var weeks = Math.floor(dateDiff / week)
-      dateDiff %= week
-      var days = Math.floor(dateDiff / day)
-      dateDiff %= day
-      var hours = Math.floor(dateDiff / hour)
-      dateDiff %= hour
-      var minutes = Math.floor(dateDiff / minute)
-      dateDiff %= minute
-      var seconds = Math.floor(dateDiff / second)
+        var weeks = Math.floor(dateDiff / week)
+        dateDiff %= week
+        var days = Math.floor(dateDiff / day)
+        dateDiff %= day
+        var hours = Math.floor(dateDiff / hour)
+        dateDiff %= hour
+        var minutes = Math.floor(dateDiff / minute)
+        dateDiff %= minute
+        var seconds = Math.floor(dateDiff / second)
 
-      weeks = (weeks == 0)? "" : (weeks == 1)? weeks + " Week, " : weeks + " Weeks, "
-      days = (days == 0)? "" : (days == 1)? days + " Day, " : days + " Days, "
-      hours = (hours == 0)? "" : (hours == 1)? hours + " Hour, " : hours + " Hours, "
-      minutes = (minutes == 0)? "" : (minutes == 1)? minutes + " Minute, " : minutes + " Minutes, "
-      seconds = (seconds == 1)? seconds + " Second " : seconds + " Seconds "
+        weeks = (weeks == 0)? "" : (weeks == 1)? weeks + " Week, " : weeks + " Weeks, "
+        days = (days == 0)? "" : (days == 1)? days + " Day, " : days + " Days, "
+        hours = (hours == 0)? "" : (hours == 1)? hours + " Hour, " : hours + " Hours, "
+        minutes = (minutes == 0)? "" : (minutes == 1)? minutes + " Minute, " : minutes + " Minutes, "
+        seconds = (seconds == 1)? seconds + " Second " : seconds + " Seconds "
 
-      this.timeElapsedSincePublish = weeks + days + hours + minutes + seconds
-      console.log(this.timeElapsedSincePublish)
+        this.timeElapsedSincePublish = weeks + days + hours + minutes + seconds
+        console.log(this.timeElapsedSincePublish)        
+      }
+      calcTimeElapsedSincePublish()
+      interval = setInterval(calcTimeElapsedSincePublish, 1000)
     },
     async getVideoData() {
+      clearInterval(interval)
       var videoID = this.youtubeParser(this.URL)
       if (videoID) {
         var apiData = await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&id=" + videoID + "&key=AIzaSyCn0Z4eeX3JhZqcjjpiODD1Xx4AYrcTv0s")
@@ -103,6 +110,9 @@ export default {
         this.URL = ''
       }
     }
+  },
+  unmounted() {
+    clearInterval(interval)
   }
 }
 </script>
