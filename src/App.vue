@@ -49,25 +49,34 @@ export default {
       this.videoPublishDateString = day + ", " + month + " " + dayOfMonth + ", " + year + ", at " + hours + ":" + minutes + " " + ampm
     },
     setTimeElapsedSincePublish(publishDate) {
-      const now = new Date()
+      const second = 1000
+      const minute = second * 60
+      const hour = minute * 60
+      const day = hour * 24
+      const week = day * 7
 
-      const isPastPublishedMonth = now.getMonth() > publishDate.getMonth()
-      const isPublishedMonth = now.getMonth() == publishDate.getMonth()
-      const isPastPublishedDay = now.getDate() > publishDate.getDate()
-      const isPublishedDay = now.getDate() == publishDate.getDate()
-      const isPastPublishedHour = now.getHours() > publishDate.getHours()
-      const isPublishedHour = now.getHours() == publishDate.getHours()
-      const isPastPublishedMinute = now.getMinutes() > publishDate.getMinutes()
-      const isPublishedMinute = now.getMinutes() == publishDate.getMinutes()
-      const isPastPublishedSecond = now.getSeconds() >= publishDate.getSeconds()
+      const now = Date.now()
+      publishDate = publishDate.valueOf()
+      var dateDiff = now - publishDate
 
-      const removeYears = (isPastPublishedMonth ||
-        (isPublishedMonth && isPastPublishedDay) ||
-        (isPublishedMonth && isPublishedDay && isPastPublishedHour) ||
-        (isPublishedMonth && isPublishedDay && isPublishedHour && isPastPublishedMinute) ||
-        (isPublishedMonth && isPublishedDay && isPublishedHour && isPublishedMinute && isPastPublishedSecond))? 0 : 1
-      const years = now.getFullYear() - publishDate.getFullYear() - removeYears
-      console.log(years)
+      var weeks = Math.floor(dateDiff / week)
+      dateDiff %= week
+      var days = Math.floor(dateDiff / day)
+      dateDiff %= day
+      var hours = Math.floor(dateDiff / hour)
+      dateDiff %= hour
+      var minutes = Math.floor(dateDiff / minute)
+      dateDiff %= minute
+      var seconds = Math.floor(dateDiff / second)
+
+      weeks = (weeks == 0)? "" : (weeks == 1)? weeks + " Week, " : weeks + " Weeks, "
+      days = (days == 0)? "" : (days == 1)? days + " Day, " : days + " Days, "
+      hours = (hours == 0)? "" : (hours == 1)? hours + " Hour, " : hours + " Hours, "
+      minutes = (minutes == 0)? "" : (minutes == 1)? minutes + " Minute, " : minutes + " Minutes, "
+      seconds = (seconds == 1)? seconds + " Second " : seconds + " Seconds "
+
+      this.timeElapsedSincePublish = weeks + days + hours + minutes + seconds
+      console.log(this.timeElapsedSincePublish)
     },
     async getVideoData() {
       var videoID = this.youtubeParser(this.URL)
@@ -122,7 +131,7 @@ export default {
             <h3><b>Date and Time Published</b></h3>
             <div class="my-5">{{ videoPublishDateString }}</div>
             <h3><b>Time Elapsed Since Publishing</b></h3>
-            <div class="my-5">Coming Soon</div> <!-- Placeholder -->
+            <div class="my-5">{{ timeElapsedSincePublish }}</div> <!-- Placeholder -->
           </div>
         </div>
       </div>
